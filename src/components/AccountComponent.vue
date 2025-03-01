@@ -1,3 +1,9 @@
 <template>
-  <div>account</div>
+  <div class="row q-mt-md">
+    <div class="col-3"></div>
+    <div class="col-2"></div>
+    <div class="col-3"></div>
+    <div class="col-3"></div>
+    <div class="col-1"></div>
+  </div>
 </template>
