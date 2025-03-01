@@ -5,7 +5,7 @@ import AccountComponent from './AccountComponent.vue'
 <template>
   <section class="main_section">
     <div class="row items-center q-gutter-x-md">
-      <h5 class="text-weight-bold">Учётные записи</h5>
+      <h5 class="text-weight-bold q-my-none">Учётные записи</h5>
         <q-btn
           outline
           padding="md"
@@ -13,7 +13,7 @@ import AccountComponent from './AccountComponent.vue'
           icon="add"
       />
     </div>
-    <q-card flat class="row items-center q-gutter-x-sm bg-blue-grey-1">
+    <q-card flat class="row items-center q-gutter-x-sm bg-blue-grey-1 q-mt-lg no-wrap">
       <q-icon name="help" color="dark" size="md" />
       <span>Для указания нескольких меток для одной пары логин/пароль используйте разделитель ;</span>
     </q-card>
@@ -25,5 +25,6 @@ import AccountComponent from './AccountComponent.vue'
 .main_section {
   width: 100%;
   max-width: 768px;
+  padding: 0 16px;
 }
 </style>
