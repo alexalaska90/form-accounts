@@ -3,7 +3,7 @@ import FormComponent from '../components/FormComponent.vue'
 </script>
 
 <template>
-  <q-page class="row items-center justify-evenly">
+  <q-page class="row items-center justify-center">
     <FormComponent />
   </q-page>
 </template>
