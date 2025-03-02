@@ -38,10 +38,10 @@ const changeNotes = (account: IAccount, index: number): void => {
 const validate = (account: IAccount, index: number, key: 'login' | 'password') => {
   if (wrapper[index]) {
     if (wrapper[index][`${key}String`]!.length) {
-      (wrapper[index][`${key}IsValid`] = true);
+      wrapper[index][`${key}IsValid`] = true
       account[key] = wrapper[index][`${key}String`]!
     } else {
-      (wrapper[index][`${key}IsValid`] = false);
+      wrapper[index][`${key}IsValid`] = false
     }
   }
 }
