@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import AccountComponent from './AccountComponent.vue'
+import AccountsComponent from './AccountsComponent.vue'
 </script>
 
 <template>
@@ -17,14 +17,7 @@ import AccountComponent from './AccountComponent.vue'
       <q-icon name="help" color="dark" size="md" />
       <span>Для указания нескольких меток для одной пары логин/пароль используйте разделитель ;</span>
     </q-card>
-    <div class="row q-mt-md">
-      <div class="col-3 text-subtitle2 text-weight-bold text-grey-7">Метки</div>
-      <div class="col-2 text-subtitle2 text-weight-bold text-grey-7">Тип записи</div>
-      <div class="col-3 text-subtitle2 text-weight-bold text-grey-7">Логин</div>
-      <div class="col-3 text-subtitle2 text-weight-bold text-grey-7">Пароль</div>
-      <div class="col-1"></div>
-    </div>
-    <AccountComponent />
+    <AccountsComponent />
   </section>
 </template>
 
