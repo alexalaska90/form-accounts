@@ -48,13 +48,13 @@ const validate = (account: IAccount, index: number, key: 'login' | 'password') =
 </script>
 
 <template>
-  <div class="row q-gutter-x-md items-center no-wrap q-mt-md">
+  <div class="row q-gutter-x-md items-start no-wrap q-mt-md q-mb-lg">
     <div class="col-3 text-subtitle2 text-weight-bold text-grey-7">Метки</div>
     <div class="col-2 text-subtitle2 text-weight-bold text-grey-7">Тип записи</div>
     <div class="col-3 text-subtitle2 text-weight-bold text-grey-7">Логин</div>
     <div class="col text-subtitle2 text-weight-bold text-grey-7">Пароль</div>
   </div>
-  <div v-for="(account, index) in accounts" :key="index" class="row q-gutter-x-md items-center no-wrap q-mt-md">
+  <div v-for="(account, index) in accounts" :key="index" class="row q-gutter-x-md items-start no-wrap q-mt-md">
     <div class="col-3">
       <q-input
         placeholder="Значение"
@@ -90,6 +90,7 @@ const validate = (account: IAccount, index: number, key: 'login' | 'password') =
         dense
         :type="wrapper[index]!.isVisible ? 'text' : 'password'"
         @blur="validate(account, index, 'password')"
+        :rules="rules"
         maxlength="100"
       >
         <template v-slot:append>
