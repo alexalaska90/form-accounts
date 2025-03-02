@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia'
-import type { IState } from 'src/models'
+import type { IAccount } from 'src/models'
 
 export const useAccountsStore = defineStore('accounts', {
-  state: (): IState => ({
+  state: () => ({
     accounts: [
       {
         notes: [
@@ -14,15 +14,15 @@ export const useAccountsStore = defineStore('accounts', {
           },
         ],
         record: 'Локальная',
-        login: 'test@mail.com',
-        password: 'test',
+        login: 'aezakmi@mail.com',
+        password: 'aezakmi',
       },
       {
         notes: null,
         record: 'LDAP',
         login: 'hesoyam@mail.com',
-        password: 'hesoyam',
+        password: null,
       },
-    ],
+    ] as IAccount[],
   }),
 })

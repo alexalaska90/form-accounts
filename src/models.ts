@@ -3,12 +3,11 @@ export interface INote {
 }
 
 export interface IAccount {
+  notesString: string | null
   notes: INote[] | null
   record: 'Локальная' | 'LDAP'
   login: string
   password: string | null
 }
 
-export interface IState {
-  accounts: IAccount[]
-}
+export type IEvent = string | number | null

@@ -3,7 +3,7 @@ import AccountsComponent from './AccountsComponent.vue'
 </script>
 
 <template>
-  <section class="main_section">
+  <section class="main_section q-px-lg">
     <div class="row items-center q-gutter-x-md">
       <h5 class="text-weight-bold q-my-none">Учётные записи</h5>
       <q-btn outline padding="md" color="primary" icon="add" />
@@ -22,6 +22,5 @@ import AccountsComponent from './AccountsComponent.vue'
 .main_section {
   width: 100%;
   max-width: 1024px;
-  padding: 0 16px;
 }
 </style>
