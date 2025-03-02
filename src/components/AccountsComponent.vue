@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive, defineExpose } from 'vue'
+import { ref, reactive, onMounted, defineExpose, watch, nextTick } from 'vue'
 import { useAccountsStore } from 'src/stores/accounts-store'
 import type { INote, IEvent, IAccountWrapper, IAccount } from 'src/models'
 import type { QInput, ValidationRule } from 'quasar'
@@ -19,6 +19,12 @@ const wrapper = reactive<IAccountWrapper[]>(
     isVisible: false,
   })),
 )
+
+onMounted(() => {
+  if (localStorage.getItem('accounts') === null) {
+    localStorage.setItem('accounts', JSON.stringify(accounts))
+  }
+})
 
 const updateString = (index: number, event: IEvent, key: keyof IAccountWrapper): void => {
   ;(wrapper[index]![key] as IEvent) = event
@@ -42,18 +48,23 @@ const validate = (account: IAccount, index: number, key: 'login' | 'password') =
 }
 
 const validateFields = (account: IAccount, index: number) => {
-  inputRefs.value.forEach((el) => void el.validate())
   validate(account, index, 'login')
   validate(account, index, 'password')
 }
 
-const removeAccount = (index: number) => {
+const removePassword = (account: IAccount, index: number): void => {
+  if (wrapper[index]) {
+    account.password = null
+    wrapper[index].passwordString = null
+  }
+}
+
+const removeAccount = (index: number): void => {
   accounts.splice(index, 1)
   wrapper.splice(index, 1)
 }
 
-const addAccount = (): void => {
-  inputRefs.value.forEach((el) => void el.validate())
+const addAccount = async (): Promise<void> => {
   if (inputRefs.value.every((el) => !el.hasError)) {
     accounts.push({
       notes: null,
@@ -68,8 +79,18 @@ const addAccount = (): void => {
       isVisible: false,
     })
   }
+  await nextTick()
+  inputRefs.value.forEach((el) => void el.validate())
 }
 defineExpose({ addAccount })
+
+watch(accounts, async () => {
+  await nextTick()
+  inputRefs.value.forEach((el) => void el.validate())
+  if (inputRefs.value.every((el) => !el.hasError)) {
+    localStorage.setItem('accounts', JSON.stringify(accounts));
+  }
+})
 
 const thumbStyle = reactive<Partial<CSSStyleDeclaration>>({
   right: '4px',
@@ -105,7 +126,7 @@ const barStyle = reactive<Partial<CSSStyleDeclaration>>({
         />
       </div>
       <div class="col-2">
-        <q-select placeholder="Значение" outlined v-model="account.record" :options="options" dense />
+        <q-select placeholder="Значение" outlined v-model="account.record" :options="options" @update:model-value="removePassword(account, index)" dense />
       </div>
       <div class="col">
         <q-input

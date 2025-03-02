@@ -21,7 +21,7 @@ export const useAccountsStore = defineStore('accounts', {
         notes: null,
         record: 'LDAP',
         login: 'hesoyam@mail.com',
-        password: 'hesoyam',
+        password: null,
       },
     ] as IAccount[],
   }),
