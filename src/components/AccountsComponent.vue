@@ -13,12 +13,18 @@ const wrapper = reactive<IAccountWrapper[]>(
   accountsStore.accounts.map((account: IAccount) => ({
     notesString: account.notes && account.notes.map((note: INote) => note.text).join(';'),
     loginString: account.login,
-    loginIsValid: true,
     passwordString: account.password,
-    passwordIsValid: true,
     isVisible: false,
   })),
 )
+
+const noFirstSpace = (index: number, event: KeyboardEvent, key: 'login' | 'password') => {
+  if (wrapper[index]) {
+    if (!wrapper[index][`${key}String`]!.length && event.key === ' ') {
+      event.preventDefault();
+    }
+  }
+}
 
 const updateString = (index: number, event: IEvent, key: keyof IAccountWrapper): void => {
   ;(wrapper[index]![key] as IEvent) = event
@@ -36,13 +42,8 @@ const changeNotes = (account: IAccount, index: number): void => {
 }
 
 const validate = (account: IAccount, index: number, key: 'login' | 'password') => {
-  if (wrapper[index]) {
-    if (wrapper[index][`${key}String`]!.length) {
-      wrapper[index][`${key}IsValid`] = true
-      account[key] = wrapper[index][`${key}String`]!
-    } else {
-      wrapper[index][`${key}IsValid`] = false
-    }
+  if (wrapper[index] && wrapper[index][`${key}String`]!.length) {
+    account[key] = wrapper[index][`${key}String`]!
   }
 }
 
@@ -67,6 +68,7 @@ const removeAccount = (index: number) => {
         :model-value="wrapper[index]!.notesString"
         @update:modelValue="updateString(index, $event, 'notesString')"
         @blur="changeNotes(account, index)"
+        @keydown.space.prevent
         dense
         maxlength="50"
       />
@@ -81,6 +83,7 @@ const removeAccount = (index: number) => {
         :model-value="wrapper[index]!.loginString"
         @update:modelValue="updateString(index, $event, 'loginString')"
         @blur="validate(account, index, 'login')"
+        @keydown="noFirstSpace(index, $event, 'login')"
         :rules="rules"
         dense
         maxlength="100"
@@ -95,6 +98,7 @@ const removeAccount = (index: number) => {
         dense
         :type="wrapper[index]!.isVisible ? 'text' : 'password'"
         @blur="validate(account, index, 'password')"
+        @keydown="noFirstSpace(index, $event, 'password')"
         :rules="rules"
         maxlength="100"
       >

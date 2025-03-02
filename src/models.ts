@@ -12,9 +12,7 @@ export interface IAccount {
 export interface IAccountWrapper {
   notesString: string | null
   loginString: string | null
-  loginIsValid: boolean
   passwordString: string | null
-  passwordIsValid: boolean
   isVisible: boolean
 }
 
