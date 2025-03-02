@@ -10,7 +10,7 @@ const accounts = accountsStore.accounts
 const options = reactive<string[]>(['LDAP', 'Локальная'])
 const rules = reactive<ValidationRule[]>([(value) => value.length || 'Заполните поле'])
 const wrapper = reactive<IAccountWrapper[]>(
-  accountsStore.accounts.map((account) => ({
+  accountsStore.accounts.map((account: IAccount) => ({
     notesString: account.notes && account.notes.map((note: INote) => note.text).join(';'),
     loginString: account.login,
     loginIsValid: true,
