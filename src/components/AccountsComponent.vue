@@ -45,6 +45,11 @@ const validate = (account: IAccount, index: number, key: 'login' | 'password') =
     }
   }
 }
+
+const removeAccount = (index: number) => {
+  accounts.splice(index, 1);
+  wrapper.splice(index, 1)
+}
 </script>
 
 <template>
@@ -102,6 +107,6 @@ const validate = (account: IAccount, index: number, key: 'login' | 'password') =
         </template>
       </q-input>
     </div>
-    <q-btn flat color="negative" class="q-pa-xs" icon="delete" />
+    <q-btn @click="removeAccount(index)" flat color="negative" class="q-pa-xs" icon="delete" />
   </div>
 </template>
