@@ -21,7 +21,7 @@ import AccountsComponent from './AccountsComponent.vue'
 <style lang="scss">
 .main_section {
   width: 100%;
-  max-width: 1368px;
+  max-width: 1024px;
   padding: 0 16px;
 }
 </style>
