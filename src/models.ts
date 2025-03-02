@@ -3,11 +3,17 @@ export interface INote {
 }
 
 export interface IAccount {
-  notesString: string | null
   notes: INote[] | null
   record: 'Локальная' | 'LDAP'
   login: string
-  password: string | null
+  password: string
+}
+
+export interface IAccountWrapper {
+  notesString: string | null
+  loginString: string | null
+  passwordString: string | null
+  isPwd: boolean
 }
 
 export type IEvent = string | number | null
