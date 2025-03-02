@@ -5,8 +5,8 @@ export interface INote {
 export interface IAccount {
   notes: INote[] | null
   record: 'Локальная' | 'LDAP'
-  login: string
-  password: string
+  login: string | null
+  password: string | null
 }
 
 export interface IAccountWrapper {

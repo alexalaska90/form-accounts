@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { reactive } from 'vue'
+import { ref, reactive, defineExpose } from 'vue'
 import { useAccountsStore } from 'src/stores/accounts-store'
 import type { INote, IEvent, IAccountWrapper, IAccount } from 'src/models'
-import type { ValidationRule } from 'quasar'
+import type { QInput, ValidationRule } from 'quasar'
 
 const accountsStore = useAccountsStore()
 const accounts = accountsStore.accounts
 
 const options = reactive<string[]>(['LDAP', 'Локальная'])
-const rules = reactive<ValidationRule[]>([(value) => value.length || 'Заполните поле'])
+const rules = reactive<ValidationRule[]>([(value) => value?.length || 'Заполните поле'])
 const wrapper = reactive<IAccountWrapper[]>(
   accountsStore.accounts.map((account: IAccount) => ({
     notesString: account.notes && account.notes.map((note: INote) => note.text).join(';'),
@@ -17,14 +17,6 @@ const wrapper = reactive<IAccountWrapper[]>(
     isVisible: false,
   })),
 )
-
-const noFirstSpace = (index: number, event: KeyboardEvent, key: 'login' | 'password') => {
-  if (wrapper[index]) {
-    if (!wrapper[index][`${key}String`]!.length && event.key === ' ') {
-      event.preventDefault();
-    }
-  }
-}
 
 const updateString = (index: number, event: IEvent, key: keyof IAccountWrapper): void => {
   ;(wrapper[index]![key] as IEvent) = event
@@ -42,15 +34,44 @@ const changeNotes = (account: IAccount, index: number): void => {
 }
 
 const validate = (account: IAccount, index: number, key: 'login' | 'password') => {
-  if (wrapper[index] && wrapper[index][`${key}String`]!.length) {
+  if (wrapper[index] && wrapper[index][`${key}String`]?.length) {
     account[key] = wrapper[index][`${key}String`]!
   }
 }
 
+const inputsRefs = ref<InstanceType<typeof QInput>[]>([])
+const unwrappedInputsRefs = { inputsRefs }
+
+const validateFields = (account: IAccount, index: number) => {
+  inputsRefs.value.forEach((el) => void el.validate())
+  validate(account, index, 'login')
+  validate(account, index, 'password')
+}
+
 const removeAccount = (index: number) => {
-  accounts.splice(index, 1);
+  accounts.splice(index, 1)
   wrapper.splice(index, 1)
 }
+
+const addAccount = (): void => {
+  inputsRefs.value.forEach((el) => void el.validate())
+  if (inputsRefs.value.every((el) => !el.hasError)) {
+    accounts.push({
+      notes: null,
+      record: 'Локальная',
+      login: null,
+      password: null,
+    })
+    wrapper.push({
+      notesString: null,
+      loginString: null,
+      passwordString: null,
+      isVisible: false,
+    })
+  }
+}
+
+defineExpose({ addAccount })
 </script>
 
 <template>
@@ -78,12 +99,13 @@ const removeAccount = (index: number) => {
     </div>
     <div class="col">
       <q-input
+        :ref="unwrappedInputsRefs.inputsRefs"
         placeholder="Значение"
         outlined
         :model-value="wrapper[index]!.loginString"
         @update:modelValue="updateString(index, $event, 'loginString')"
-        @blur="validate(account, index, 'login')"
-        @keydown="noFirstSpace(index, $event, 'login')"
+        @blur="validateFields(account, index)"
+        @keydown.space.prevent
         :rules="rules"
         dense
         maxlength="100"
@@ -91,14 +113,15 @@ const removeAccount = (index: number) => {
     </div>
     <div class="col" v-if="account.record === 'Локальная'">
       <q-input
+        :ref="unwrappedInputsRefs.inputsRefs"
         placeholder="Значение"
         outlined
         :model-value="wrapper[index]!.passwordString"
         @update:modelValue="updateString(index, $event, 'passwordString')"
         dense
         :type="wrapper[index]!.isVisible ? 'text' : 'password'"
-        @blur="validate(account, index, 'password')"
-        @keydown="noFirstSpace(index, $event, 'password')"
+        @blur="validateFields(account, index)"
+        @keydown.space.prevent
         :rules="rules"
         maxlength="100"
       >
