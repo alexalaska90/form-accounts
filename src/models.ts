@@ -12,8 +12,10 @@ export interface IAccount {
 export interface IAccountWrapper {
   notesString: string | null
   loginString: string | null
+  loginIsValid: boolean
   passwordString: string | null
-  isPwd: boolean
+  passwordIsValid: boolean
+  isVisible: boolean
 }
 
 export type IEvent = string | number | null

@@ -2,17 +2,21 @@
 import { reactive } from 'vue'
 import { useAccountsStore } from 'src/stores/accounts-store'
 import type { INote, IEvent, IAccountWrapper, IAccount } from 'src/models'
+import type { ValidationRule } from 'quasar'
 
 const accountsStore = useAccountsStore()
 const accounts = accountsStore.accounts
 
 const options = reactive<string[]>(['LDAP', 'Локальная'])
+const rules = reactive<ValidationRule[]>([(value) => value.length || 'Заполните поле'])
 const wrapper = reactive<IAccountWrapper[]>(
   accountsStore.accounts.map((account) => ({
     notesString: account.notes && account.notes.map((note: INote) => note.text).join(';'),
     loginString: account.login,
+    loginIsValid: true,
     passwordString: account.password,
-    isPwd: true,
+    passwordIsValid: true,
+    isVisible: false,
   })),
 )
 
@@ -20,7 +24,7 @@ const updateString = (index: number, event: IEvent, key: keyof IAccountWrapper):
   ;(wrapper[index]![key] as IEvent) = event
 }
 
-const inputUnfocused = (account: IAccount, index: number): void => {
+const changeNotes = (account: IAccount, index: number): void => {
   if (wrapper[index]) {
     if (wrapper[index].notesString) {
       account.notes = wrapper[index].notesString.split(';').map((value) => ({
@@ -28,17 +32,18 @@ const inputUnfocused = (account: IAccount, index: number): void => {
       }))
       account.notes = account.notes.filter((note) => note.text)
     } else account.notes = null
-
-    if (wrapper[index].loginString) {
-      account.login = wrapper[index].loginString
-    } else account.login = ''
-
-    if (wrapper[index].passwordString) {
-      account.password = wrapper[index].passwordString
-    } else account.password = ''
   }
+}
 
-  console.log(account)
+const validate = (account: IAccount, index: number, key: 'login' | 'password') => {
+  if (wrapper[index]) {
+    if (wrapper[index][`${key}String`]!.length) {
+      (wrapper[index][`${key}IsValid`] = true);
+      account[key] = wrapper[index][`${key}String`]!
+    } else {
+      (wrapper[index][`${key}IsValid`] = false);
+    }
+  }
 }
 </script>
 
@@ -56,7 +61,7 @@ const inputUnfocused = (account: IAccount, index: number): void => {
         outlined
         :model-value="wrapper[index]!.notesString"
         @update:modelValue="updateString(index, $event, 'notesString')"
-        @blur="inputUnfocused(account, index)"
+        @blur="changeNotes(account, index)"
         dense
         maxlength="50"
       />
@@ -70,7 +75,8 @@ const inputUnfocused = (account: IAccount, index: number): void => {
         outlined
         :model-value="wrapper[index]!.loginString"
         @update:modelValue="updateString(index, $event, 'loginString')"
-        @blur="inputUnfocused(account, index)"
+        @blur="validate(account, index, 'login')"
+        :rules="rules"
         dense
         maxlength="100"
       />
@@ -82,15 +88,15 @@ const inputUnfocused = (account: IAccount, index: number): void => {
         :model-value="wrapper[index]!.passwordString"
         @update:modelValue="updateString(index, $event, 'passwordString')"
         dense
-        :type="wrapper[index]!.isPwd ? 'password' : 'text'"
-        @blur="inputUnfocused(account, index)"
+        :type="wrapper[index]!.isVisible ? 'text' : 'password'"
+        @blur="validate(account, index, 'password')"
         maxlength="100"
       >
         <template v-slot:append>
           <q-icon
-            :name="wrapper[index]!.isPwd ? 'visibility_off' : 'visibility'"
+            :name="wrapper[index]!.isVisible ? 'visibility' : 'visibility_off'"
             class="cursor-pointer"
-            @click="wrapper[index]!.isPwd = !wrapper[index]!.isPwd"
+            @click="wrapper[index]!.isVisible = !wrapper[index]!.isVisible"
           />
         </template>
       </q-input>
