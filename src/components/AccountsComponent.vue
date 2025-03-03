@@ -111,7 +111,11 @@ const barStyle = reactive<Partial<CSSStyleDeclaration>>({
     <div class="col text-subtitle2 text-weight-bold text-grey-7">Пароль</div>
   </div>
   <q-scroll-area :thumb-style="thumbStyle" :bar-style="barStyle" style="height: 380px">
-    <div v-for="(account, index) in accounts" :key="index" class="row q-gutter-x-md items-start q-mt-md q-mb-md-none q-mb-xl fit">
+    <div
+      v-for="(account, index) in accounts"
+      :key="index"
+      class="row q-gutter-x-md items-start q-mt-md q-mb-md-none q-mb-xl fit"
+    >
       <div class="col-md-3 col-12">
         <q-input
           placeholder="Значение"
