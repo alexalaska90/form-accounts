@@ -93,7 +93,6 @@ watch(accounts.value, async (newValue): Promise<void> => {
 })
 
 const thumbStyle = reactive<Partial<CSSStyleDeclaration>>({
-  right: '4px',
   borderRadius: '5px',
   backgroundColor: '#027be3',
   width: '5px',
@@ -105,15 +104,15 @@ const barStyle = reactive<Partial<CSSStyleDeclaration>>({
 </script>
 
 <template>
-  <div class="row q-gutter-x-md items-start no-wrap q-mt-md q-mb-lg">
+  <div class="row gt-sm q-gutter-x-md items-start q-mt-md q-mb-md">
     <div class="col-3 text-subtitle2 text-weight-bold text-grey-7">Метки</div>
     <div class="col-2 text-subtitle2 text-weight-bold text-grey-7">Тип записи</div>
-    <div class="col-3 text-subtitle2 text-weight-bold text-grey-7">Логин</div>
+    <div class="col-3 text-subtitle2 text-weight-bold text-grey-7" style="width: 22.5%">Логин</div>
     <div class="col text-subtitle2 text-weight-bold text-grey-7">Пароль</div>
   </div>
   <q-scroll-area :thumb-style="thumbStyle" :bar-style="barStyle" style="height: 380px">
-    <div v-for="(account, index) in accounts" :key="index" class="row q-gutter-x-md items-start no-wrap q-mt-md">
-      <div class="col-3">
+    <div v-for="(account, index) in accounts" :key="index" class="row q-gutter-x-md items-start q-mt-md q-mb-md-none q-mb-xl fit">
+      <div class="col-md-3 col-12">
         <q-input
           placeholder="Значение"
           outlined
@@ -125,7 +124,7 @@ const barStyle = reactive<Partial<CSSStyleDeclaration>>({
           maxlength="50"
         />
       </div>
-      <div class="col-2">
+      <div class="col-md-2 col-12 q-mt-md q-mt-md-none">
         <q-select
           placeholder="Значение"
           outlined
@@ -135,7 +134,7 @@ const barStyle = reactive<Partial<CSSStyleDeclaration>>({
           dense
         />
       </div>
-      <div class="col">
+      <div class="col-md col-12 q-mt-md q-mt-md-none">
         <q-input
           :ref="unwrappedInputRefs.inputRefs"
           placeholder="Значение"
@@ -149,7 +148,7 @@ const barStyle = reactive<Partial<CSSStyleDeclaration>>({
           maxlength="100"
         />
       </div>
-      <div class="col" v-if="account.record === 'Локальная'">
+      <div class="col-md col-12" v-if="account.record === 'Локальная'">
         <q-input
           :ref="unwrappedInputRefs.inputRefs"
           placeholder="Значение"
@@ -172,7 +171,10 @@ const barStyle = reactive<Partial<CSSStyleDeclaration>>({
           </template>
         </q-input>
       </div>
-      <q-btn @click="removeAccount(index)" flat color="negative" class="q-pa-xs" icon="delete" />
+      <q-btn @click="removeAccount(index)" flat color="negative" class="gt-sm q-pa-xs" icon="delete" />
+      <div class="col-12 lt-md q-mt-sm">
+        <q-btn class="full-width" @click="removeAccount(index)" color="negative" icon="delete" />
+      </div>
     </div>
   </q-scroll-area>
 </template>
