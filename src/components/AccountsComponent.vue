@@ -117,6 +117,7 @@ const barStyle = reactive<Partial<CSSStyleDeclaration>>({
       class="row q-gutter-x-md items-start q-mt-md q-mb-md-none q-mb-xl fit"
     >
       <div class="col-md-3 col-12">
+        <div class="lt-md text-subtitle2 text-weight-bold text-grey-7">Метки</div>
         <q-input
           placeholder="Значение"
           outlined
@@ -129,6 +130,7 @@ const barStyle = reactive<Partial<CSSStyleDeclaration>>({
         />
       </div>
       <div class="col-md-2 col-12 q-mt-md q-mt-md-none">
+        <div class="lt-md text-subtitle2 text-weight-bold text-grey-7">Тип записи</div>
         <q-select
           placeholder="Значение"
           outlined
@@ -139,6 +141,7 @@ const barStyle = reactive<Partial<CSSStyleDeclaration>>({
         />
       </div>
       <div class="col-md col-12 q-mt-md q-mt-md-none">
+        <div class="lt-md text-subtitle2 text-weight-bold text-grey-7">Логин</div>
         <q-input
           :ref="unwrappedInputRefs.inputRefs"
           placeholder="Значение"
@@ -153,6 +156,7 @@ const barStyle = reactive<Partial<CSSStyleDeclaration>>({
         />
       </div>
       <div class="col-md col-12" v-if="account.record === 'Локальная'">
+        <div class="lt-md text-subtitle2 text-weight-bold text-grey-7">Пароль</div>
         <q-input
           :ref="unwrappedInputRefs.inputRefs"
           placeholder="Значение"
